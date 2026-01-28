@@ -40,6 +40,9 @@ export default function Dashboard() {
   const [videos, setVideos] = useState<Video[]>([]);
   const [stats, setStats] = useState<Stats | null>(null);
   const [loading, setLoading] = useState(true);
+  const [collecting, setCollecting] = useState(false);
+  const [collectError, setCollectError] = useState('');
+  const [collectSuccess, setCollectSuccess] = useState('');
   const [filter, setFilter] = useState({
     bucket: 'all',
     region: 'all',
@@ -77,6 +80,40 @@ export default function Dashboard() {
       console.error('Error fetching data:', error);
     } finally {
       setLoading(false);
+    }
+  };
+
+  const triggerCollection = async () => {
+    const secret = prompt('Enter your CRON_SECRET to trigger collection:');
+    if (!secret) return;
+
+    setCollecting(true);
+    setCollectError('');
+    setCollectSuccess('');
+
+    try {
+      const response = await fetch('/api/cron/collect-trending', {
+        headers: {
+          'Authorization': `Bearer ${secret}`,
+        },
+      });
+
+      const data = await response.json();
+
+      if (response.ok && data.success) {
+        setCollectSuccess(`Collection successful! Processed ${data.stats.totalVideosProcessed} videos.`);
+        // Refresh data after 2 seconds
+        setTimeout(() => {
+          fetchData();
+          setCollectSuccess('');
+        }, 2000);
+      } else {
+        setCollectError(data.error || 'Collection failed. Check your CRON_SECRET.');
+      }
+    } catch (error) {
+      setCollectError('Failed to trigger collection. Please try again.');
+    } finally {
+      setCollecting(false);
     }
   };
 
@@ -120,10 +157,40 @@ export default function Dashboard() {
     <main className="min-h-screen bg-gradient-to-br from-gray-900 to-gray-800 text-white p-4 md:p-8">
       <div className="max-w-7xl mx-auto">
         {/* Header */}
-        <div className="mb-8">
-          <h1 className="text-4xl font-bold mb-2">YouTube Trending Dashboard</h1>
-          <p className="text-gray-400">Real-time trending video analytics</p>
+        <div className="mb-8 flex items-center justify-between">
+          <div>
+            <h1 className="text-4xl font-bold mb-2">YouTube Trending Dashboard</h1>
+            <p className="text-gray-400">Real-time trending video analytics</p>
+          </div>
+          <button
+            onClick={triggerCollection}
+            disabled={collecting}
+            className="bg-blue-600 hover:bg-blue-700 disabled:bg-gray-600 disabled:cursor-not-allowed px-6 py-3 rounded-lg font-semibold transition flex items-center gap-2"
+          >
+            {collecting ? (
+              <>
+                <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
+                Collecting...
+              </>
+            ) : (
+              <>
+                🔄 Collect Now
+              </>
+            )}
+          </button>
         </div>
+
+        {/* Collection Messages */}
+        {collectSuccess && (
+          <div className="mb-4 bg-green-500/20 border border-green-500 text-green-300 px-4 py-3 rounded-lg">
+            ✅ {collectSuccess}
+          </div>
+        )}
+        {collectError && (
+          <div className="mb-4 bg-red-500/20 border border-red-500 text-red-300 px-4 py-3 rounded-lg">
+            ❌ {collectError}
+          </div>
+        )}
 
         {/* Stats Cards */}
         {stats && (
@@ -226,12 +293,19 @@ export default function Dashboard() {
           <div className="bg-gray-800 rounded-lg p-12 text-center">
             <div className="text-6xl mb-4">📭</div>
             <h3 className="text-xl font-semibold mb-2">No Data Yet</h3>
-            <p className="text-gray-400 mb-4">
-              The collector hasn't run yet. Trigger it manually or wait for the scheduled cron job.
+            <p className="text-gray-400 mb-6">
+              The collector hasn't run yet. Click "Collect Now" above to start collecting trending videos!
             </p>
-            <code className="text-sm bg-gray-900 px-4 py-2 rounded inline-block">
-              curl -H "Authorization: Bearer YOUR_SECRET" /api/cron/collect-trending
-            </code>
+            <button
+              onClick={triggerCollection}
+              disabled={collecting}
+              className="bg-blue-600 hover:bg-blue-700 disabled:bg-gray-600 px-8 py-4 rounded-lg font-semibold transition text-lg"
+            >
+              {collecting ? 'Collecting...' : '🚀 Start First Collection'}
+            </button>
+            <p className="text-gray-500 text-sm mt-4">
+              Or wait for the scheduled daily cron job
+            </p>
           </div>
         ) : (
           <div className="space-y-4">

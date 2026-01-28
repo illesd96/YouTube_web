@@ -59,10 +59,10 @@ export async function GET(request: NextRequest) {
       },
       take: limit,
       skip: offset,
-    });
+    }).catch(() => []);
 
     // Get total count for pagination
-    const total = await prisma.feedHit.count({ where });
+    const total = await prisma.feedHit.count({ where }).catch(() => 0);
 
     // Format response
     const results = feedHits.map((hit) => ({
@@ -92,9 +92,15 @@ export async function GET(request: NextRequest) {
     });
   } catch (error: any) {
     console.error('Error fetching trending videos:', error);
-    return NextResponse.json(
-      { error: 'Failed to fetch trending videos' },
-      { status: 500 }
-    );
+    // Return empty results instead of error
+    return NextResponse.json({
+      results: [],
+      pagination: {
+        total: 0,
+        limit,
+        offset,
+        hasMore: false,
+      },
+    });
   }
 }

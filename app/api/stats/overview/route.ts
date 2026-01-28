@@ -18,7 +18,7 @@ export async function GET(request: NextRequest) {
         seenAt: { gte: last24h },
       },
       _count: true,
-    });
+    }).catch(() => []);
 
     // Fetch stats for last 7d
     const stats7d = await prisma.feedHit.groupBy({
@@ -27,21 +27,21 @@ export async function GET(request: NextRequest) {
         seenAt: { gte: last7d },
       },
       _count: true,
-    });
+    }).catch(() => []);
 
     // Count unique videos in last 24h
     const uniqueVideos24h = await prisma.feedHit.findMany({
       where: { seenAt: { gte: last24h } },
       select: { videoId: true },
       distinct: ['videoId'],
-    });
+    }).catch(() => []);
 
     // Count unique videos in last 7d
     const uniqueVideos7d = await prisma.feedHit.findMany({
       where: { seenAt: { gte: last7d } },
       select: { videoId: true },
       distinct: ['videoId'],
-    });
+    }).catch(() => []);
 
     // Count shorts vs long-form in last 24h
     const shortsCount24h = await prisma.feedHit.count({
@@ -49,20 +49,20 @@ export async function GET(request: NextRequest) {
         seenAt: { gte: last24h },
         video: { isShort: true },
       },
-    });
+    }).catch(() => 0);
 
     const longFormCount24h = await prisma.feedHit.count({
       where: {
         seenAt: { gte: last24h },
         video: { isShort: false },
       },
-    });
+    }).catch(() => 0);
 
     // Get last successful run
     const lastRun = await prisma.collectorRun.findFirst({
       where: { status: 'ok' },
       orderBy: { finishedAt: 'desc' },
-    });
+    }).catch(() => null);
 
     // Format bucket stats
     const formatBucketStats = (stats: any[]) => ({
@@ -94,9 +94,21 @@ export async function GET(request: NextRequest) {
     });
   } catch (error: any) {
     console.error('Error fetching overview stats:', error);
-    return NextResponse.json(
-      { error: 'Failed to fetch stats' },
-      { status: 500 }
-    );
+    // Return empty stats instead of error
+    return NextResponse.json({
+      last24h: {
+        totalHits: 0,
+        uniqueVideos: 0,
+        byBucket: { viral: 0, stable: 0, low: 0 },
+        shorts: 0,
+        longForm: 0,
+      },
+      last7d: {
+        totalHits: 0,
+        uniqueVideos: 0,
+        byBucket: { viral: 0, stable: 0, low: 0 },
+      },
+      lastRun: null,
+    });
   }
 }
