@@ -22,8 +22,8 @@ export default function Home() {
             
             <div className="bg-gray-700 rounded p-4">
               <div className="text-sm text-gray-400">Collection Schedule</div>
-              <div className="text-lg font-semibold">Every 6 Hours</div>
-              <div className="text-xs text-gray-500">Automated via Vercel Cron</div>
+              <div className="text-lg font-semibold">Daily</div>
+              <div className="text-xs text-gray-500">Vercel Cron (6h with Pro)</div>
             </div>
           </div>
         </div>

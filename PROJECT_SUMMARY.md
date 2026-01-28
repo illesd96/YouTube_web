@@ -7,7 +7,7 @@ A production-ready Next.js application that automatically collects YouTube trend
 ## 🎯 Key Features
 
 ### Automated Data Collection
-- ✅ Runs every 6 hours via Vercel Cron (0:00, 6:00, 12:00, 18:00 UTC)
+- ✅ Runs daily via Vercel Cron (Hobby plan) or every 6 hours (Pro plan)
 - ✅ Collects from 6 top-paying markets: US, CA, GB, AU, DE, CH
 - ✅ Uses YouTube Data API v3 (mostPopular endpoint)
 - ✅ Processes ~5,000 unique videos per day

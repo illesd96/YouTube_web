@@ -121,8 +121,18 @@ curl -H "Authorization: Bearer your_cron_secret" \
 
 1. Check Vercel logs (Dashboard → Your Project → Logs)
 2. Ensure `vercel.json` is in the root directory
-3. Ensure your plan supports cron jobs (Hobby plan includes cron)
+3. Ensure your plan supports cron jobs:
+   - **Hobby plan**: 1 job per day (default: daily at midnight)
+   - **Pro plan**: Unlimited frequency (can use every 6 hours)
 4. Check that `CRON_SECRET` is set in Vercel environment variables
+
+### Want More Frequent Collection?
+
+See **[VERCEL_CRON_SETUP.md](VERCEL_CRON_SETUP.md)** for options:
+- Upgrade to Vercel Pro ($20/month)
+- Use GitHub Actions (free)
+- Use external cron services (free)
+- Manual triggers as needed
 
 ### Database Connection Issues
 

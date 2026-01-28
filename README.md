@@ -4,7 +4,7 @@ A Next.js web application that automatically collects YouTube most-popular video
 
 ## Features
 
-- 🔄 **Automated Collection**: Runs every 6 hours via Vercel Cron
+- 🔄 **Automated Collection**: Runs daily via Vercel Cron (every 6 hours on Pro plan)
 - 🌍 **Global Markets**: Collects from US, CA, GB, AU, DE, CH
 - 📊 **Smart Classification**:
   - Shorts vs Long-form detection
