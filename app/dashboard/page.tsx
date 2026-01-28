@@ -47,6 +47,7 @@ export default function Dashboard() {
     bucket: 'all',
     region: 'all',
     shorts: 'all',
+    category: 'all',
     limit: 20,
   });
 
@@ -71,6 +72,7 @@ export default function Dashboard() {
       if (filter.bucket !== 'all') params.append('bucket', filter.bucket);
       if (filter.region !== 'all') params.append('region', filter.region);
       if (filter.shorts !== 'all') params.append('shorts', filter.shorts);
+      if (filter.category !== 'all') params.append('category', filter.category);
 
       // Fetch videos
       const videosRes = await fetch(`/api/trending?${params}`);
@@ -222,7 +224,7 @@ export default function Dashboard() {
         {/* Filters */}
         <div className="bg-gray-800 rounded-lg p-6 mb-8">
           <h2 className="text-xl font-semibold mb-4">Filters</h2>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+          <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
             <div>
               <label className="block text-sm text-gray-400 mb-2">Performance</label>
               <select
@@ -264,6 +266,32 @@ export default function Dashboard() {
                 <option value="all">All Types</option>
                 <option value="true">Shorts</option>
                 <option value="false">Long-form</option>
+              </select>
+            </div>
+
+            <div>
+              <label className="block text-sm text-gray-400 mb-2">Category</label>
+              <select
+                value={filter.category}
+                onChange={(e) => setFilter({ ...filter, category: e.target.value })}
+                className="w-full bg-gray-700 rounded px-3 py-2 text-white"
+              >
+                <option value="all">All Categories</option>
+                <option value="1">Film & Animation</option>
+                <option value="2">Autos & Vehicles</option>
+                <option value="10">Music</option>
+                <option value="15">Pets & Animals</option>
+                <option value="17">Sports</option>
+                <option value="19">Travel & Events</option>
+                <option value="20">Gaming</option>
+                <option value="22">People & Blogs</option>
+                <option value="23">Comedy</option>
+                <option value="24">Entertainment</option>
+                <option value="25">News & Politics</option>
+                <option value="26">Howto & Style</option>
+                <option value="27">Education</option>
+                <option value="28">Science & Technology</option>
+                <option value="29">Nonprofits & Activism</option>
               </select>
             </div>
 

@@ -12,6 +12,7 @@ export async function GET(request: NextRequest) {
   const niche = searchParams.get('niche') || undefined;
   const bucket = searchParams.get('bucket') || undefined;
   const shorts = searchParams.get('shorts');
+  const category = searchParams.get('category') || undefined;
   const hoursAgo = parseInt(searchParams.get('hours') || '24');
   const limit = Math.min(parseInt(searchParams.get('limit') || '50'), 200);
   const offset = parseInt(searchParams.get('offset') || '0');
@@ -37,6 +38,11 @@ export async function GET(request: NextRequest) {
   // Niche filter
   if (niche) {
     where.nicheTags = { has: niche };
+  }
+
+  // Category filter
+  if (category) {
+    where.categoryId = category;
   }
 
   // Shorts filter
