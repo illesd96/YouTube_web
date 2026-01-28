@@ -63,15 +63,24 @@ export async function GET(request: NextRequest) {
       orderBy: {
         viewsPerHour: 'desc',
       },
-      take: limit,
-      skip: offset,
     }).catch(() => []);
 
-    // Get total count for pagination
-    const total = await prisma.feedHit.count({ where }).catch(() => 0);
+    // Deduplicate by video_id - keep only the best performance per video
+    const uniqueVideos = new Map();
+    feedHits.forEach((hit) => {
+      const existing = uniqueVideos.get(hit.videoId);
+      if (!existing || hit.viewsPerHour > existing.viewsPerHour) {
+        uniqueVideos.set(hit.videoId, hit);
+      }
+    });
+
+    // Convert to array and apply pagination
+    const allResults = Array.from(uniqueVideos.values());
+    const total = allResults.length;
+    const paginatedResults = allResults.slice(offset, offset + limit);
 
     // Format response
-    const results = feedHits.map((hit) => ({
+    const results = paginatedResults.map((hit) => ({
       videoId: hit.videoId,
       title: hit.video.title,
       channelTitle: hit.video.channelTitle,
