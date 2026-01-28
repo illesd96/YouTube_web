@@ -12,7 +12,10 @@ export const NICHES: NicheDefinition[] = [
       'luxury home', 'luxury house', 'mansion', 'villa', 'penthouse',
       'estate tour', 'house tour', 'property tour', 'architectural digest',
       'real estate', 'dream home', 'modern house', 'interior design',
-      'architecture tour'
+      'architecture tour', 'luxury property', 'luxury estate', 'luxury real estate',
+      'luxury residence', 'million dollar', 'expensive house', 'expensive home',
+      'luxury apartment', 'luxury condo', 'waterfront property', 'beachfront',
+      'luxury listing', 'property showcase', 'home design', 'luxury interior'
     ],
   },
   {
@@ -42,7 +45,8 @@ export const NICHES: NicheDefinition[] = [
     name: 'Luxury (General)',
     keywords: [
       'luxury', 'premium', 'high end', 'exclusive', 'bespoke',
-      'limited edition', 'collector'
+      'limited edition', 'collector', 'luxury lifestyle', 'ultra luxury',
+      'luxury living', 'opulent', 'extravagant', 'lavish', 'prestige'
     ],
   },
   {

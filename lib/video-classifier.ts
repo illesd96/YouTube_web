@@ -84,7 +84,7 @@ export function classifyVideo(video: youtube_v3.Schema$Video): ClassifiedVideo |
   }
 
   const durationSeconds = parseDuration(video.contentDetails.duration);
-  const isShort = durationSeconds <= 60;
+  const isShort = durationSeconds <= 120; // 2 minutes threshold
   
   const publishedAt = new Date(video.snippet.publishedAt);
   const viewCount = BigInt(video.statistics.viewCount);

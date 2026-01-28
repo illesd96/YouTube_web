@@ -172,8 +172,8 @@ Appearance tracking - when and where each video appeared
 ## Classification System
 
 ### Shorts vs Long-form
-- Videos ≤ 60 seconds = Shorts
-- Videos > 60 seconds = Long-form
+- Videos ≤ 2 minutes (120 seconds) = Shorts
+- Videos > 2 minutes = Long-form
 
 ### Performance Buckets
 
