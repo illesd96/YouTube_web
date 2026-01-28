@@ -1,10 +1,20 @@
+import Link from 'next/link';
+
 export default function Home() {
   return (
     <main className="min-h-screen p-8 bg-gradient-to-br from-gray-900 to-gray-800 text-white">
       <div className="max-w-4xl mx-auto">
-        <h1 className="text-4xl font-bold mb-6">
-          YouTube Trending Collector
-        </h1>
+        <div className="flex items-center justify-between mb-6">
+          <h1 className="text-4xl font-bold">
+            YouTube Trending Collector
+          </h1>
+          <Link
+            href="/dashboard"
+            className="bg-blue-600 hover:bg-blue-700 px-6 py-3 rounded-lg font-semibold transition"
+          >
+            View Dashboard →
+          </Link>
+        </div>
         
         <div className="bg-gray-800 rounded-lg p-6 mb-6">
           <h2 className="text-2xl font-semibold mb-4">System Status</h2>
