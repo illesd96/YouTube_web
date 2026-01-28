@@ -4,6 +4,10 @@ import { config } from '@/lib/config';
 import { youtubeClient } from '@/lib/youtube-client';
 import { classifyVideo } from '@/lib/video-classifier';
 
+// Force dynamic rendering
+export const dynamic = 'force-dynamic';
+export const runtime = 'nodejs';
+
 interface CategoryCache {
   [regionCode: string]: {
     categories: string[];
@@ -144,6 +148,14 @@ async function collectTrendingVideos(runId: string) {
 }
 
 export async function GET(request: NextRequest) {
+  // Check required environment variables
+  if (!config.youtube.apiKey || !config.database.url || !config.cron.secret) {
+    return NextResponse.json(
+      { error: 'Server configuration error: Missing required environment variables' },
+      { status: 500 }
+    );
+  }
+
   // Verify cron secret
   const authHeader = request.headers.get('authorization');
   const expectedAuth = `Bearer ${config.cron.secret}`;

@@ -1,12 +1,12 @@
 export const config = {
   youtube: {
-    apiKey: process.env.YOUTUBE_API_KEY!,
+    apiKey: process.env.YOUTUBE_API_KEY || '',
   },
   database: {
-    url: process.env.DATABASE_URL!,
+    url: process.env.DATABASE_URL || '',
   },
   cron: {
-    secret: process.env.CRON_SECRET!,
+    secret: process.env.CRON_SECRET || '',
   },
   regions: (process.env.REGIONS || 'US,CA,GB,AU,DE,CH').split(','),
   thresholds: {
@@ -19,4 +19,4 @@ export const config = {
       stable: parseInt(process.env.STABLE_VPH_SHORT || '25000'),
     },
   },
-} as const;
+};

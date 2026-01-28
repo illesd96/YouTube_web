@@ -2,13 +2,16 @@ import { google, youtube_v3 } from 'googleapis';
 import { config } from './config';
 
 export class YouTubeClient {
-  private youtube: youtube_v3.Youtube;
+  private youtube: youtube_v3.Youtube | null = null;
 
-  constructor() {
-    this.youtube = google.youtube({
-      version: 'v3',
-      auth: config.youtube.apiKey,
-    });
+  private getYouTube(): youtube_v3.Youtube {
+    if (!this.youtube) {
+      this.youtube = google.youtube({
+        version: 'v3',
+        auth: config.youtube.apiKey,
+      });
+    }
+    return this.youtube;
   }
 
   /**
@@ -20,7 +23,7 @@ export class YouTubeClient {
     maxResults: number = 50
   ): Promise<youtube_v3.Schema$Video[]> {
     try {
-      const response = await this.youtube.videos.list({
+      const response = await this.getYouTube().videos.list({
         part: ['snippet', 'contentDetails', 'statistics'],
         chart: 'mostPopular',
         regionCode,
@@ -44,7 +47,7 @@ export class YouTubeClient {
    */
   async getVideoCategories(regionCode: string): Promise<youtube_v3.Schema$VideoCategory[]> {
     try {
-      const response = await this.youtube.videoCategories.list({
+      const response = await this.getYouTube().videoCategories.list({
         part: ['snippet'],
         regionCode,
       });
