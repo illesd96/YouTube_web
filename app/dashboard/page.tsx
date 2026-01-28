@@ -48,6 +48,7 @@ export default function Dashboard() {
     region: 'all',
     shorts: 'all',
     category: 'all',
+    niche: 'all',
     limit: 20,
   });
 
@@ -73,6 +74,7 @@ export default function Dashboard() {
       if (filter.region !== 'all') params.append('region', filter.region);
       if (filter.shorts !== 'all') params.append('shorts', filter.shorts);
       if (filter.category !== 'all') params.append('category', filter.category);
+      if (filter.niche !== 'all') params.append('niche', filter.niche);
 
       // Fetch videos
       const videosRes = await fetch(`/api/trending?${params}`);
@@ -224,7 +226,7 @@ export default function Dashboard() {
         {/* Filters */}
         <div className="bg-gray-800 rounded-lg p-6 mb-8">
           <h2 className="text-xl font-semibold mb-4">Filters</h2>
-          <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
             <div>
               <label className="block text-sm text-gray-400 mb-2">Performance</label>
               <select
@@ -270,28 +272,51 @@ export default function Dashboard() {
             </div>
 
             <div>
-              <label className="block text-sm text-gray-400 mb-2">Category</label>
+              <label className="block text-sm text-gray-400 mb-2">Niche</label>
+              <select
+                value={filter.niche}
+                onChange={(e) => setFilter({ ...filter, niche: e.target.value })}
+                className="w-full bg-gray-700 rounded px-3 py-2 text-white"
+              >
+                <option value="all">All Niches</option>
+                <option value="Luxury Houses / Real Estate">🏰 Luxury Real Estate</option>
+                <option value="Luxury (General)">💎 Luxury (General)</option>
+                <option value="Luxury Women Clothing & Accessories">👜 Luxury Fashion</option>
+                <option value="Yachts">🛥️ Yachts</option>
+                <option value="Automobiles">🚗 Automobiles</option>
+                <option value="Electric Vehicles">⚡ Electric Vehicles</option>
+                <option value="Tech">💻 Tech</option>
+                <option value="Stock Market / Investing">📈 Investing</option>
+                <option value="Business">💼 Business</option>
+                <option value="Make Money Online">💰 Make Money Online</option>
+                <option value="Engineering">⚙️ Engineering</option>
+                <option value="Travel">✈️ Travel</option>
+                <option value="Pets">🐾 Pets</option>
+                <option value="Court / Law">⚖️ Court / Law</option>
+                <option value="Website / SaaS Reviews">🌐 Website / SaaS</option>
+                <option value="Economy / Macro">📊 Economy / Macro</option>
+                <option value="History">📜 History</option>
+                <option value="Football (Soccer)">⚽ Football</option>
+                <option value="High-Paying Meta Tags">💵 High-Paying Topics</option>
+              </select>
+            </div>
+
+            <div>
+              <label className="block text-sm text-gray-400 mb-2">YT Category</label>
               <select
                 value={filter.category}
                 onChange={(e) => setFilter({ ...filter, category: e.target.value })}
-                className="w-full bg-gray-700 rounded px-3 py-2 text-white"
+                className="w-full bg-gray-700 rounded px-3 py-2 text-white text-sm"
               >
-                <option value="all">All Categories</option>
-                <option value="1">Film & Animation</option>
-                <option value="2">Autos & Vehicles</option>
+                <option value="all">All</option>
                 <option value="10">Music</option>
-                <option value="15">Pets & Animals</option>
-                <option value="17">Sports</option>
-                <option value="19">Travel & Events</option>
                 <option value="20">Gaming</option>
-                <option value="22">People & Blogs</option>
-                <option value="23">Comedy</option>
                 <option value="24">Entertainment</option>
-                <option value="25">News & Politics</option>
-                <option value="26">Howto & Style</option>
+                <option value="28">Tech</option>
+                <option value="22">Vlogs</option>
+                <option value="17">Sports</option>
+                <option value="23">Comedy</option>
                 <option value="27">Education</option>
-                <option value="28">Science & Technology</option>
-                <option value="29">Nonprofits & Activism</option>
               </select>
             </div>
 
