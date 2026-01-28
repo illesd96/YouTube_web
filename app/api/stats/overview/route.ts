@@ -41,22 +41,18 @@ export async function GET(request: NextRequest) {
     });
 
     // Count shorts vs long-form in last 24h
-    const shortStats24h = await prisma.feedHit.groupBy({
-      by: ['video'],
+    const shortsCount24h = await prisma.feedHit.count({
       where: {
         seenAt: { gte: last24h },
         video: { isShort: true },
       },
-      _count: true,
     });
 
-    const longFormStats24h = await prisma.feedHit.groupBy({
-      by: ['video'],
+    const longFormCount24h = await prisma.feedHit.count({
       where: {
         seenAt: { gte: last24h },
         video: { isShort: false },
       },
-      _count: true,
     });
 
     // Get last successful run
@@ -77,8 +73,8 @@ export async function GET(request: NextRequest) {
         totalHits: stats24h.reduce((sum, s) => sum + s._count, 0),
         uniqueVideos: uniqueVideos24h.length,
         byBucket: formatBucketStats(stats24h),
-        shorts: shortStats24h.length,
-        longForm: longFormStats24h.length,
+        shorts: shortsCount24h,
+        longForm: longFormCount24h,
       },
       last7d: {
         totalHits: stats7d.reduce((sum, s) => sum + s._count, 0),
